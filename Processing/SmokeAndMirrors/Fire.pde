@@ -1,5 +1,4 @@
-// from Smoke import *
-class Fire() {
+class Fire {
   
   // Instance Variables
   private ArrayList<Smoke> pClusters;
@@ -9,7 +8,7 @@ class Fire() {
   private String color_type;
 
   // Constructor
-  Fire(int init_center) {
+  Fire(PVector init_center) {
     this.pClusters = new ArrayList<Smoke>(); 
     this.pClusters.add(new Smoke(init_center));
     this.age = 0;
@@ -19,7 +18,7 @@ class Fire() {
   }
 
   // Get size of clusters
-  void size() {
+  int size() {
     return this.pClusters.size(); 
   }
 

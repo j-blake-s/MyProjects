@@ -7,7 +7,7 @@ Fire fire;
 void setup() {
   fullScreen(P2D);
   background(0);
-  fire = new Fire(PVector(width/2,height/2));
+  fire = new Fire(new PVector(width/2,height/2));
   frameRate(60);
 }
 
