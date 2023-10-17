@@ -60,7 +60,7 @@
        if (this.particles.get(i).age >= lifespan) {
          this.particles.remove(i);
          this.kill();
-         break; // Maybe this is here?
+        //  break; // Maybe this is here?
        }
      }
    }

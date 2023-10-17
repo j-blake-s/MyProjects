@@ -15,7 +15,7 @@ class SmokeParticle {
     this.vel = this.initial_vel();
     this.acc = new PVector(0,0);
     this.size = 25;
-    this.img = img;
+    this.img = image;
   }
       
   PVector initial_vel() {
@@ -45,8 +45,8 @@ class SmokeParticle {
     blendMode(SCREEN);
     // tint(255,0,0)
     noStroke();
-    ellipse(this.pos.x, this.pos.y, this.size/4.0, this.size/4.0);
-    //image(this.img, this.pos.x, this.pos.y);
+    // ellipse(this.pos.x, this.pos.y, this.size/4.0, this.size/4.0);
+    image(this.img, this.pos.x, this.pos.y);
     this.age += 1;
   }
  }

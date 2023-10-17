@@ -8,7 +8,8 @@
         "kind": "build",
         "isDefault": true
       },
-      "command": "C:\\Users\\seekingj\\Documents\\processing-4.3\\processing-java.exe",
+      "command": "/home/seekingj/Documents/processing-4.1.2/processing-java",
+      // "command": "C:\\Users\\seekingj\\Documents\\processing-4.3\\processing-java.exe",
       "presentation": {
         "echo": true,
         "reveal": "always",
