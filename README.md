@@ -1,2 +1,2 @@
 # MyProjects
-A repo for my projects
+A repo for my projects.
