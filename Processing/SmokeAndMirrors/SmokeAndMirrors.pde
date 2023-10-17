@@ -1,7 +1,3 @@
-//from Fire import *
-
-
-
 float windX = 0.001;
 float windY = 0.001;
 float dt = 0.001;
@@ -34,41 +30,50 @@ void keyPressed() {
     if (keyCode >= 37 && keyCode <= 40) {
         keys_[keyCode - 37] = true;
     }
+
+    // Key (Num): 1
     else if (keyCode == 49) {
         fire.color_type = "RED-ORANGE";
     }
+
+    // Key (Num): 2
     else if (keyCode == 50) {
         fire.color_type = "BLUE-WHITE";
     }
+
+    // Key (Num): 3
     else if (keyCode == 51) {
         fire.color_type = "GREEN";
     }
+
+    // Key (Num): 4
     else if (keyCode == 52) {
         fire.color_type = "ORANGE";
     }
+
+    // Catch
     else {
         return;
     }
 }
 
-
 void keyReleased() {
+    // Keys (Arrows): Left, Up, Right, Down
     if (keyCode >= 37 && keyCode <= 40) {
         keys_[keyCode - 37] = false;
     }
 }
 
-// def updateWind():
-//     global keys_
-//     global windX
-//     global windY
-//     global dt
-//     if keys_[0]:
-//         windX -= dt
-//     if keys_[1]:
-//         windY -= dt
-//     if keys_[2]:
-//         windX += dt
-//     if keys_[3]:
-//         windY += dt
-        
+void updateWind() {
+    // if Left Arrow then push left
+    if (keys_[0]) windX -= dt;
+
+    // if Up Arrow then push up
+    if (keys_[1]) windY -= dt;
+    
+    // if Right Arrow then push right
+    if (keys_[2]) windX += dt;
+    
+    // if Down Arrow then push down
+    if (keys_[3]) windY += dt;       
+}
