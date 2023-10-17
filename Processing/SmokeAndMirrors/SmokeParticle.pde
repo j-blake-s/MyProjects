@@ -9,7 +9,7 @@ class SmokeParticle {
   private PImage img;
 
   // Constructors
-  SmokeParticle(int x, int y, PImage image) {
+  SmokeParticle(float x, float y, PImage image) {
     this.age = 0;
     this.pos = new PVector(x, y);
     this.vel = this.initial_vel();
@@ -38,14 +38,15 @@ class SmokeParticle {
       tint(1 * ratio, 0.5  * ratio, 0 * ratio, opacity);
     else
       noLoop();
+      
 
     // fill(200,40,0,100-self.age)
     imageMode(CENTER);
     blendMode(SCREEN);
     // tint(255,0,0)
     noStroke();
-    // ellipse(self.pos.x,self.pos.y, self.size/4,self.size/4)
-    // image(self.img,self.pos.x,self.pos.y);
+    ellipse(this.pos.x, this.pos.y, this.size/4.0, this.size/4.0);
+    //image(this.img, this.pos.x, this.pos.y);
     this.age += 1;
   }
  }

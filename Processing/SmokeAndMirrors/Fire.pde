@@ -34,7 +34,7 @@ class Fire {
 
   void spawn() {
     for (Smoke cluster : this.pClusters) {
-    cluster.spawn();
+      cluster.spawn();
     }
   }
 

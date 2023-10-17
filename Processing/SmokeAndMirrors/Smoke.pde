@@ -49,7 +49,7 @@
        float mag = this.size / 2.0;
        float adjustX = random(-mag, mag);
        float adjustY = random(-mag, mag);
-       // this.particles.append(new Smoke_Particle(mouseX + adjustX, mouseY + adjustY,this.img));
+       this.particles.add(new SmokeParticle(mouseX + adjustX, mouseY + adjustY, this.img));
      }
      this.age += 1;
    }

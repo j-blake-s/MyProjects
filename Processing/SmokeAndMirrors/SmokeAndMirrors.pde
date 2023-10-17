@@ -14,10 +14,10 @@ void setup() {
 void draw() {
   background(50);
   tint(255);
-//   updateWind()
+  updateWind();
   PVector forceOfWind = new PVector(windX,windY);
-//   fire.applyForce(forceOfWind)
-//   fire.update()
+  fire.applyForce(forceOfWind);
+  fire.update();
   fill(255);
   text("FRAMERATE: " + str(frameRate), width - 150,30);
   // text("CLUSTERS " + str(fire.count()), width - 150,60);
