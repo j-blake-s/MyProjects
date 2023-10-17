@@ -13,21 +13,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-public class test extends PApplet {
+public class base extends PApplet {
+
+  public void setup() {
 
 
-
-
-
-public void setup() {
-  /* size commented out by preprocessor */;
-}
-
-
-  public void settings() { size(800, 800); }
+    noLoop();
+  }
 
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "test" };
+    String[] appletArgs = new String[] { "base" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {
