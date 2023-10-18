@@ -1,42 +1,51 @@
 class Fire {
   
   // Instance Variables
-  private ArrayList<Smoke> pClusters;
+  private ArrayList<Smoke> clusters;
   private int age;
-  private int spread_rate;
-  private int spread_amount;
-  private String color_type;
+  // private int spread_rate;
+  // private int spread_amount;
+  public String color_type;
+
+  // Declare default values
+  private void init() {
+    this.age = 0;
+    // this.spread_rate = 200;
+    // this.spread_amount = 2;
+    this.color_type = "RED-ORANGE";
+    this.clusters = new ArrayList<Smoke>(); 
+  }
 
   // Constructor
-  Fire(PVector init_center) {
-    this.pClusters = new ArrayList<Smoke>(); 
-    this.pClusters.add(new Smoke(init_center));
-    this.age = 0;
-    this.spread_rate = 200;
-    this.spread_amount = 2;
-    this.color_type = "RED-ORANGE";
+  Fire(float x, float y, int size) {
+    init();
+    this.clusters.add(new Smoke(x, y, size));
   }
 
   // Get size of clusters
   int size() {
-    return this.pClusters.size(); 
+    return this.clusters.size(); 
   }
 
-  // Update all clusters
-  void update() {
-    this.spawn();
-    this.run();
-    this.draw_();
-    this.kill();
+  // Sets the centers of all of the smoke clusters
+  void set_center(float x, float y) {
+     for (Smoke cluster : this.clusters) cluster.set_center(x, y);
+  }
+
+  // Apply a force vector to all smoke clusters
+  void apply_force(PVector force) {
+    for (Smoke cluster : this.clusters) cluster.apply_force(force);
+  }
+
+  // Run all smoke clusters
+  void run() {
+    for (Smoke cluster : this.clusters) cluster.run(this.color_type);
     this.age += 1;
     //this.spread();
   }
 
-  void spawn() {
-    for (Smoke cluster : this.pClusters) {
-      cluster.spawn();
-    }
-  }
+}
+
 
 //   def spread(self):
 //     for particle_cluster in self.particle_clusters:  
@@ -58,37 +67,4 @@ class Fire {
 //             temp_smoke = Smoke(PVector(x,y))
 //             temp_smoke.lifespan = random(101,400)
 //             self.particle_clusters.append(temp_smoke)
-    
-  void kill() {
-    for (Smoke cluster : this.pClusters) {
-      cluster.kill();
-    }
-  }
-  
-  void applyForce(PVector force) {
-    for (Smoke cluster : this.pClusters) {
-      cluster.applyForce(force);
-    }
-  }
-
-  void run() {
-    for (Smoke cluster : this.pClusters) {
-      cluster.run();
-    }
-  }
-
-  void draw_() {
-    for (Smoke cluster : this.pClusters) {
-      cluster.draw_(this.color_type);
-    }
-  }
-}
-
-
-
-
-
-
-
-
     

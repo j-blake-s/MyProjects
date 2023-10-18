@@ -1,52 +1,56 @@
-class SmokeParticle {
+class SmokeParticle extends Particle {
 
   // Instance Variables
-  private int age;
-  private PVector pos;
-  private PVector vel;
-  private PVector acc;
   private int size;
   private PImage img;
 
   // Constructors
-  SmokeParticle(float x, float y, PImage image) {
-    this.age = 0;
-    this.pos = new PVector(x, y);
-    this.vel = this.initial_vel();
-    this.acc = new PVector(0,0);
-    this.size = 25;
+  SmokeParticle(float x, float y, PImage image, int size) {
+    super(x,y);
+    this.vel = this.random_vel();
+    this.size = size;
     this.img = image;
   }
-      
-  PVector initial_vel() {
+
+  // Getters and Setters
+  int get_size() {return this.size;}
+  void set_size(int s) {this.size = s;}
+
+  // Get a random velocity for new smoke particle    
+  private PVector random_vel() {
     float vx = randomGaussian() * 0.5;
     float vy = randomGaussian() * 0.5 - 1.4;
     return new PVector(vx, vy);
   }
 
-  void draw_(String color_type) {
-    int opacity = 100;
-    int ratio = 20;
-    
-    if (color_type.equals("RED-ORANGE"))
-      tint(1.5 * ratio, 0.5 * ratio, 1 * ratio, opacity);
-    else if (color_type.equals("BLUE-WHITE"))
-      tint(1 * ratio, 1  * ratio, 2  * ratio, opacity);
-    else if (color_type.equals("GREEN"))
-      tint(1  * ratio, 1  * ratio, 0  * ratio, opacity);
-    else if (color_type.equals("ORANGE"))
-      tint(1 * ratio, 0.5  * ratio, 0 * ratio, opacity);
-    else
-      noLoop();
-      
+  // Sets tint according to color type
+  private void set_tint(String color_type) {set_tint(color_type, 20, 0);}
+  private void set_tint(String color_type, int ratio, int opacity) {
+    if (color_type.equals("RED-ORANGE")) tint(1.5 * ratio, 0.5 * ratio, 1 * ratio, opacity);
+    else if (color_type.equals("BLUE-WHITE")) tint(1 * ratio, 1  * ratio, 2  * ratio, opacity);
+    else if (color_type.equals("GREEN")) tint(1  * ratio, 1  * ratio, 0  * ratio, opacity);
+    else if (color_type.equals("ORANGE")) tint(1 * ratio, 0.5  * ratio, 0 * ratio, opacity);
+    else tint(1.5 * ratio, 0.5 * ratio, 1 * ratio, opacity); //RED-ORANGE
+  }
 
-    // fill(200,40,0,100-self.age)
+  // Draws smoke visual to the screen
+  void draw_(String color_type) {
+    this.set_tint(color_type);
     imageMode(CENTER);
     blendMode(SCREEN);
-    // tint(255,0,0)
     noStroke();
-    // ellipse(this.pos.x, this.pos.y, this.size/4.0, this.size/4.0);
-    image(this.img, this.pos.x, this.pos.y);
-    this.age += 1;
+    image(this.img, this.pos.x, this.pos.y, this.size, this.size);
   }
- }
+
+  // Updates movement vectors
+  void update_vectors() {
+    super.update_vectors();
+  }
+
+  // Run the particle for a frame
+  void run(String color_type) {
+    this.update_vectors();
+    this.draw_(color_type);
+    super.set_age(super.get_age() + 1);
+  }
+}
