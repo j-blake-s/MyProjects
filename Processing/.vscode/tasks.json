@@ -51,8 +51,8 @@
       "args": {
         "description": "Choose which Processing Sketch to run",
         "options": [
-          ["Pick directory ", "${pickFile:srcSubDir}"],
           ["Use previous directory", "${remember:srcSubDir}"],
+          ["Pick directory ", "${pickFile:srcSubDir}"],
         ],
         "default": null,
         "pickFile": {
