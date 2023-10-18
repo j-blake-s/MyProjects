@@ -1,0 +1,69 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      
+      "label": "Run Processing Sketch",
+      "type": "shell",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+
+      "command": "${config:processing.processingPath}",   
+      "presentation": {
+        "echo": true,
+        "reveal": "never",
+        "focus": false,
+        "panel": "dedicated"
+      },
+
+      "args": [
+        "--force",
+        "--sketch=${input:selectSketch}",
+        "--output=${input:selectSketch}/out",
+        "--run"
+      ],
+
+      "windows": {
+        "type": "process",
+        "args": [
+          "--force",
+          {
+            "value": "--sketch=${input:selectSketch}",
+            "quoting": "strong"
+          },
+          {
+            "value": "--output=${input:selectSketch}\\out",
+            "quoting": "strong"
+          },
+          "--run"
+        ]
+      },
+    },
+  ],
+
+  "inputs": [
+    {
+      "id": "selectSketch",
+      "type": "command",
+      "command": "extension.commandvariable.pickStringRemember",
+      "args": {
+        "description": "Choose which Processing Sketch to run",
+        "options": [
+          ["Pick directory ", "${pickFile:srcSubDir}"],
+          ["Use previous directory", "${remember:srcSubDir}"],
+        ],
+        "default": null,
+        "pickFile": {
+          "srcSubDir": {
+            "description": "Which directory?",
+            "include": "*/*.{pde}",
+            "showDirs": true,
+            "keyRemember": "srcSubDir"
+          }
+        }
+      }
+    }
+  ]
+}
