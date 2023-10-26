@@ -63,7 +63,7 @@ class Card {
 
   // Getters
   int points() {
-    return this.points
+    return this.points;
   }
 
   String rank() {
@@ -104,16 +104,16 @@ class Deck {
 
       // Add cards 2-10
       for (int i = 0; i < 9; i++) {
-        this.cards.push(new Card(i+2,suit,""+(i+2)))
+        this.cards.push(new Card(i+2, suit, ""+(i+2) ));
       }
       
       // Add Jack, Queen, King
-      for (String rank : ["J","Q","K"]) {
-        this.cards.push(new Card(10, suit, rank))
+      for (String rank : ranks) {
+        this.cards.push(new Card(10, suit, rank));
       }
 
       // Add Ace
-      this.cards.push(new Card(11, suit, "A", True)) 
+      this.cards.push(new Card(11, suit, "A", true));
     }
   
   }
@@ -146,11 +146,11 @@ class Player {
     this.score = 0;
   }
 
-  void add_card(Card c) {
+  void addCard(Card c) {
     // if card.pointValue() == 11:
     //    askUser()
     this.hand.add(c);
-    this.score += c.value();
+    this.score += c.points();
   }
 
   void emptyHand() {
@@ -173,7 +173,7 @@ class Player {
     return this.money;
   }
 
-  ArraytList<Card> hand() {
+  ArrayList<Card> hand() {
     return this.hand;
   }
 
@@ -206,7 +206,7 @@ class Button {
   }
 
   void setTextSize(int s) {
-    this.textSize(s);
+    textSize(s);
   }
 
   boolean in(int x, int y) {
@@ -225,28 +225,26 @@ class Button {
     textSize(this.text_size);
     fill(0);
     textAlign(CENTER);
-    text(this.text, (this.right+this.left)/2.0, (this.bottom+this.top+this.text_size)/2.0 );
+    text(this.text, (this.right+this.left)/2, (this.bottom+this.top+this.text_size)/2 );
   }
 }
-
-########################################################################################################################################################
 
 Deck deck;
 Player human;
 
 int scene_num  = 0;
-int intro_button = 0;
-int begin_button = 0;
-int end_button = 0;
+Button intro_button;
+Button begin_button;
+Button end_button;
 Player dealer = new Player();
 Player player = new Player();
-int finish_bet_button = 0;
-int increment_button = 0;
-int decrement_button = 0;
-int hit_button = 0;
-int stay_button = 0;
+Button finish_bet_button;
+Button increment_button;
+Button decrement_button;
+Button hit_button;
+Button stay_button;
 int bet = 500;
-boolean bool = False;
+boolean bool = false;
 int count = 0;
 
 void setup() {
@@ -257,6 +255,14 @@ void setup() {
   fullScreen();
   background(0,100,50);
 
+  intro_button = new Button(width/2-125,height/2-50, 225, 50);
+  begin_button = new Button(width/2-100,height/2-100, 150, 50);
+  end_button = new Button(width/2-100,height/2-40, 150, 50);
+  increment_button = new Button(width/2-155,height/2-40, 150, 35);
+  decrement_button = new Button(width/2+10,height/2-40, 150, 35);
+  finish_bet_button = new Button(width/2-155, height/2, 315, 35);
+  stay_button = new Button(width/2 + 30, height/2, 150, 50);
+  
   PImage img = loadImage("Back.png");
   for (int i = 0; i < 50; i++)
     image(img, 50 - (i/8.0), 400, 150, 200);
@@ -272,300 +278,266 @@ void draw() {
   else if (scene_num == 6) end_scene();
 }
 
-def mouseClicked():
-    global scene_num
-    global intro_button
-    global begin_button
-    global end_button
-    global bet
-    global finish_bet_button
-    global increment_button
-    global decrement_button
-    global hit_button
-    global stay_button
+void mouseClicked() {
+  if (scene_num == 0 && intro_button.in(mouseX, mouseY)) scene_num = 1;
+  
+  else if (scene_num == 1) {
+    if (begin_button.in(mouseX, mouseY))    scene_num = 2;
+    else if (end_button.in(mouseX,mouseY))  scene_num = 6;
+  }
 
-    global player
-    global dealer
-    global deck
-    global count
-    if scene_num == 0:
-        if intro_button.inside(mouseX,mouseY):
-            scene_num = 1
-    elif scene_num == 1:
-        if begin_button.inside(mouseX,mouseY):
-            scene_num = 2
-        elif end_button.inside(mouseX,mouseY):
-            scene_num = 6
-    elif scene_num == 2:
-        if increment_button.inside(mouseX,mouseY):
-            bet += 100
-        elif decrement_button.inside(mouseX,mouseY):
-            bet -= 100
-        elif finish_bet_button.inside(mouseX,mouseY):
-            player.decrement_money(bet)
-            scene_num = 3
-            for i in range(2):
-                player.add_card(deck.draw_())
-                dealer.add_card(deck.draw_())
-                
-    elif scene_num == 3:
-        if hit_button.inside(mouseX,mouseY):
-            player.add_card(deck.draw_())
-            if player.score() > 21:
-                scene_num = 5
-        elif stay_button.inside(mouseX,mouseY):
-            scene_num = 4
-        
-            
+  else if (scene_num == 2) {
+    if (increment_button.in(mouseX,mouseY)) bet += 100;
+    else if (decrement_button.in(mouseX,mouseY)) bet -= 100;
+    else if (finish_bet_button.in(mouseX,mouseY)) {
+      player.withdraw(bet);
+      scene_num = 3;
+      for (int i = 0; i < 2; i++) {
+        player.addCard(deck.draw());
+        dealer.addCard(deck.draw());
+      }
+    }
+  }
+
+  else if (scene_num == 3) {
+    if (hit_button.in(mouseX, mouseY)) {
+      player.addCard(deck.draw());
+      if (player.score() > 21) scene_num = 5;
+    }
+  }
+
+  else if (stay_button.in(mouseX, mouseY)) scene_num = 4;
+}
     
         
    
-def scene_0():
-    global intro_button
-    background(0,100,50)
-    textSize(40)
-    fill(255)
-    textAlign(CENTER)
-    text("Welcome to BlackJack",width/2,476)
-    intro_button = Button(width/2-125,height/2-50,225,50)
-    intro_button.set_text("Begin!",25)
-    intro_button.draw_()
-    
-def scene_1():
-    global begin_button
-    global player
-    global end_button
-    background(0,100,50)
-    draw_deck()
-    draw_money()
-        
-    begin_button = Button(width/2-100,height/2-100,150,50)
-    begin_button.set_text("Start Game",25)
-    begin_button.draw_()
-    
-    end_button = Button(width/2-100,height/2-40,150,50)
-    end_button.set_text("Quit",25) 
-    end_button.draw_()
-    
+void scene_0() {
+  background(0, 100, 50);
+  textSize(40);
+  fill(255);
+  textAlign(CENTER);
+  text("Welcome to BlackJack", width/2, 476);
+  intro_button = new Button(width/2-125,height/2-50, 225, 50);
+  intro_button.setText("Begin!");
+  intro_button.setTextSize(25);
+  intro_button.draw();
+}
+
+void scene_1() {
+  background(0,100,50);
+  draw_deck();
+  draw_money();
+  
+  begin_button = new Button(width/2-100,height/2-100, 150, 50);
+  begin_button.setText("Start Game");
+  begin_button.setTextSize(25);
+  begin_button.draw();
+  
+  end_button = new Button(width/2-100,height/2-40, 150, 50);
+  end_button.setText("Quit");
+  end_button.setTextSize(25);
+  end_button.draw();
+}
 
     
 
-def scene_2():
-    global bool
-    global bet
-    global finish_bet_button
-    global increment_button
-    global decrement_button
-    global player
-    
-    background(0,100,50)
-    draw_deck()
-    draw_money()
-        
+void scene_2() {  
+  background(0, 100, 50);
+  draw_deck();
+  draw_money();
+  
+  if (bet < 100) bet = 0;
+  else if (bet > player.balance()) bet = player.balance();
+  textSize(30);
+  fill(0);
+  text("Your bet:", width/2, height/2-120);
+  
+  Button new_button = new Button(width/2-100,height/2-100, 200, 50);
+  new_button.setText(""+bet);
+  new_button.setTextSize(35);
+  new_button.draw();
+  
+  increment_button = new Button(width/2-155,height/2-40, 150, 35);
+  increment_button.setText("+100");
+  increment_button.setTextSize(25);
+  increment_button.draw();
+  
+  decrement_button = new Button(width/2+10,height/2-40, 150, 35);
+  increment_button.setText("+100");
+  decrement_button.setTextSize(25);
+  decrement_button.draw();
+  
+  finish_bet_button = new Button(width/2-155, height/2, 315, 35);
+  finish_bet_button.setText("Bet");
+  finish_bet_button.setTextSize(25);
+  finish_bet_button.draw();
+}
 
+void scene_2_half() {
+  background(0, 100, 50);
+  draw_deck();
+  draw_money();
+  draw_bet();
+  display_player_cards();
+  display_dealer_cards(false);
+  
+  if (player.hand().size() == 2) {
+    if (count > 0) {
+      textSize(30);
+      fill(255);
+      text("What do you want your ace to be?", width/2, height/2);
+      
+      Button one_button = new Button(width/2-160,height/2+60, 150, 50);
+      one_button.setText("1");
+      one_button.setTextSize(25);
+      one_button.draw();
+      
+      Button eleven_button = new Button(width/2+10,height/2+60, 150, 50);
+      eleven_button.setText("11");
+      eleven_button.setTextSize(25);
+      eleven_button.draw();
+    }
+  }
+}
+          
+      
     
     
-    if bet < 100 :
-        bet = 0
-    elif bet > player.money():
-        bet = player.money()
-    textSize(30)
-    fill(0)
-    text("Your bet:",width/2,height/2-120)
-    new_button = Button(width/2-100,height/2-100,200,50)
-    new_button.set_text(bet,35)
-    new_button.draw_()
-    
-    increment_button = Button(width/2-155,height/2-40,150,35)
-    increment_button.set_text("+100",25)
-    increment_button.draw_()
-    
-    decrement_button = Button(width/2+10,height/2-40,150,35)
-    decrement_button.set_text("-100",25)
-    decrement_button.draw_()
-    
-    finish_bet_button = Button(width/2-155,height/2,315,35)
-    finish_bet_button.set_text("Bet",25)
-    finish_bet_button.draw_()
-def scene_2_half():
-    global player
-    global dealer
-    global bet
-    global deck
-    global hit_button
-    global stay_button
-    global count
-    global eleven_button
-    global one_button
-    background(0,100,50)
-    draw_deck()
-    draw_money()
-    draw_bet()
-    display_player_cards()
-    display_dealer_cards(False)
-    
-    if len(player.hand()) == 2:
-        if count > 0:
-            textSize(30)
-            fill(255)
-            text("What do you want your ace to be?",width/2,height/2)
-            
-            one_button = Button(width/2-160,height/2+60,150,50)
-            one_button.set_text("1",25)
-            one_button.draw_()
-            
-            eleven_button = Button(width/2+10,height/2+60,150,50)
-            eleven_button.set_text("11",25)
-            eleven_button.draw_()
-            
-            
-            
-        
-    
-    
-def scene_3():
-    global player
-    global dealer
-    global bet
-    global deck
-    global hit_button
-    global stay_button
-    background(0,100,50)
-    draw_deck()
-    draw_money()
-    draw_bet()
-    display_player_cards()
-    display_dealer_cards(False)
-    
-    
-    display_score()
-    
-    hit_button = Button(width/2 - 130,height/2, 150,50)
-    hit_button.set_text("Hit",25)
-    hit_button.draw_()
-    
-    stay_button = Button(width/2 + 30,height/2, 150,50)
-    stay_button.set_text("Stay",25)
-    stay_button.draw_()
-def scene_4():
-    global dealer 
-    global deck
-    global scene_num
-    global count
-    if dealer.score() < 17:
-        dealer.add_card(deck.draw_())
-    else:
-        scene_num = 5
-def scene_5():
+void scene_3() {
+  
+  background(0,100,50);
+  draw_deck();
+  draw_money();
+  draw_bet();
+  display_player_cards();
+  display_dealer_cards(false);
+  display_score();
+  
+  hit_button = new Button(width/2 - 130, height/2, 150, 50);
+  hit_button.setText("Hit");
+  hit_button.setTextSize(25);
+  hit_button.draw();
+  
+  stay_button = new Button(width/2 + 30, height/2, 150, 50);
+  stay_button.setText("Stay");
+  stay_button.setTextSize(25);
+  stay_button.draw();
 
-    global player
-    global dealer
-    global bet
-    global deck
-    global hit_button
-    global stay_button
-    global count
-    global scene_num
-    
-    if count == 0:
-        background(0,100,50)
-        draw_deck()
-        draw_money()
-        draw_bet()
-        display_player_cards()
-        display_dealer_cards(True)
-        display_score()
-        textSize(20)
-        fill(255)
-        text("Dealer's score: " + str(dealer.score()), width/2+20,height/2-200)
-    count += 1
-    if count == 5:
-        if dealer.score() == 21 or player.score() > 21 or (player.score() <= dealer.score() and not dealer.score() > 21):
-            fill(255)
-            textSize(30)
-            text("You lost!",width/2,height/2)  
-            bet = 0
-        else:
-            fill(255)
-            textSize(30)
-            text("You win!",width/2,height/2)  
-            bet = bet * 2
-    elif count > 200:
-        player.increment_money(bet)
-        scene_num = 1
-        count = 0
-        bet = 500
-        player.clear_hand()
-        dealer.clear_hand()
-        deck = Deck()
-        deck.shuffle_()
-    
-            
-            
-    
-            
-    
-    
-    
-    
+}
 
-    
-def draw_deck():
-    img = loadImage("Back.png")
-    noStroke()
-    fill(0,0,0,110)
-    rect(58,403,150,200)
-    for i in range(50):
-        image(img, 50-i/8,400,150,200)
-        
-def draw_money():
-    fill(0)
-    textSize(30)
-    text("Your money",width-200,height/2-70)
-    new_button = Button(width-300,height/2-50,200,50)
-    new_button.set_text(player.money(),30)
-    new_button.draw_()
-    
-def draw_bet():
-    global bet
-    fill(0)
-    textSize(30)
-    text("Your bet",width-200,height/2+80)
-    new_button = Button(width-300,height/2+100,200,50)
-    new_button.set_text(bet,30)
-    new_button.draw_()
-    
-def display_player_cards():
-    global player
-    temp = player.hand()
-    for i in range(len(temp)):
-        pathname = temp[i].rank() + temp[i].suit() + ".png"
-        img = loadImage(pathname)
-        image(img, width/2- (25 * (len(temp) + 1)) + (i * 50), height - 300,150,200) 
-        
-def display_dealer_cards(bool):
-    global dealer
-    temp = dealer.hand()
-    for i in range(len(temp)):
-        if i == 0 and bool == False:
-            pathname = "Back.png"
-            img = loadImage(pathname)
-            image(img, width/2- (25 * (len(temp) + 1)), 40,150,200)  
-        else:
-            pathname = temp[i].rank() + temp[i].suit() + ".png"
-            img = loadImage(pathname)
-            image(img, width/2- (25 * (len(temp) + 1)) + (i * 50), 40,150,200)  
-            
-def display_score():
-    global player
+void scene_4() {
+  if (dealer.score() < 17) dealer.addCard(deck.draw());
+  else scene_num = 5;
+}
 
-    textSize(20)
-    fill(255)
-    text("Your score: " + str(player.score()), width/2+20,height-350)
+void scene_5() {
+    
+  if (count == 0) {
+    background(0, 100, 50);
+    draw_deck();
+    draw_money();
+    draw_bet();
+    display_player_cards();
+    display_dealer_cards(true);
+    display_score();
+    textSize(20);
+    fill(255);
+    text("Dealer's score: " + dealer.score(), width/2+20, height/2-200);
+  }
+
+  count += 1;
+
+  if (count == 5) {
+    if (dealer.score() == 21 || player.score() > 21 || (player.score() <= dealer.score() && !(dealer.score() > 21))) {
+      fill(255);
+      textSize(30);
+      text("You lost!", width/2,height/2);  
+      bet = 0;
+    }
+
+    else {
+      fill(255);
+      textSize(30);
+      text("You win!", width/2, height/2);  
+      bet = bet * 2;
+    }
+
+  }
+
+  else if (count > 200) {
+      player.deposit(bet);
+      scene_num = 1;
+      count = 0;
+      bet = 500;
+      player.emptyHand();
+      dealer.emptyHand();
+      deck = new Deck();
+      deck.shuffle();
+  }
+
+}
             
-def end_scene():
-    exit()
-        
+void draw_deck() {
+  PImage img = loadImage("Back.png");
+  noStroke();
+  fill(0, 0, 0, 110);
+  rect(58, 403, 150, 200);
+  for (int i = 0; i < 50; i++) image(img, 50-(i/8.0), 400, 150, 200);
+}
+
+void draw_money() {
+  fill(0);
+  textSize(30);
+  text("Your money", width-200, height/2-70);
+  Button new_button = new Button(width-300, height/2-50, 200, 50);
+  new_button.setText(""+player.balance());
+  new_button.setTextSize(30);
+  new_button.draw();
+}
+
+void draw_bet() {
+  fill(0);
+  textSize(30);
+  text("Your bet", width-200, height/2+80);
+  Button new_button = new Button(width-300, height/2+100, 200, 50);
+  new_button.setText(""+bet);
+  new_button.setTextSize(30);
+  new_button.draw();
+}
+
+void display_player_cards() {
+  ArrayList<Card> temp = player.hand();
+  for (int i = 0; i < temp.size(); i++) {
+    String pathname = temp.get(i).rank() + temp.get(i).suit() + ".png";
+    PImage img = loadImage(pathname);
+    image(img, width/2 - (25 * (temp.size() + 1)) + (i * 50), height - 300, 150, 200); 
+  }
+}
+void display_dealer_cards(boolean b) {
+  ArrayList<Card> temp = dealer.hand();
+  for (int i = 0; i < temp.size(); i++) {
+    if (i == 0 && bool == false) {
+      String pathname = "Back.png";
+      PImage img = loadImage(pathname);
+      image(img, width/2 - (25 * (temp.size() + 1)), 40, 150, 200);  
+    }
+    else {
+      String pathname = temp.get(i).rank() + temp.get(i).suit() + ".png";
+      PImage img = loadImage(pathname);
+      image(img, width/2 - (25 * (temp.size() + 1)) + (i * 50), 40, 150, 200);
+    }
+  }
+}
+
+void display_score() {
+  textSize(20);
+  fill(255);
+  text("Your score: " + player.score(), width/2+20, height-350);
+}
+
+void end_scene() {
+  exit();
+}      
     
     
     
