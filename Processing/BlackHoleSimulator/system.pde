@@ -4,8 +4,6 @@ class System{
     
   }
   
-  
-  
   void addParticle(Particle p){
     particles.add(p);
   }
