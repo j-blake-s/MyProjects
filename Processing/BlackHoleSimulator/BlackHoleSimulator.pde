@@ -8,9 +8,9 @@ System blackholes = new System();
 
 
 void setup(){
-  fullScreen(P3D);
+  size(1800,1000,P3D);
   background(0);
-  frameRate(60);
+  frameRate(120);
   for (int i = 0; i <100; i++){
     Particle temp = new Particle(random(960-roomRadius,960 + roomRadius),random(540-roomRadius,540 + roomRadius),random(-roomRadius,roomRadius));  
     temp.getVel().set(random(-startSpeed ,startSpeed ),random(-startSpeed ,startSpeed ),random(-startSpeed ,startSpeed ));
