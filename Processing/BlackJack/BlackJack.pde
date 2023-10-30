@@ -147,8 +147,6 @@ class Player {
   }
 
   void addCard(Card c) {
-    // if card.pointValue() == 11:
-    //    askUser()
     this.hand.add(c);
     this.score += c.points();
   }
@@ -198,7 +196,7 @@ class Button {
     this.top = y;
     this.bottom = y + h;
     this.text = "";
-    this.text_size = 0;
+    this.text_size = 25;
   }
   
   void setText(String t) {
@@ -243,6 +241,8 @@ Button increment_button;
 Button decrement_button;
 Button hit_button;
 Button stay_button;
+Button one_button;
+Button eleven_button;
 int bet = 500;
 boolean bool = false;
 int count = 0;
@@ -276,6 +276,7 @@ void draw() {
   else if (scene_num == 4) scene_4();
   else if (scene_num == 5) scene_5();
   else if (scene_num == 6) end_scene();
+  else if (scene_num == 7) scene_2_half();
 }
 
 void mouseClicked() {
@@ -291,11 +292,12 @@ void mouseClicked() {
     else if (decrement_button.in(mouseX,mouseY)) bet -= 100;
     else if (finish_bet_button.in(mouseX,mouseY)) {
       player.withdraw(bet);
-      scene_num = 3;
       for (int i = 0; i < 2; i++) {
         player.addCard(deck.draw());
         dealer.addCard(deck.draw());
       }
+      scene_num = 3;
+
     }
   }
 
@@ -304,9 +306,17 @@ void mouseClicked() {
       player.addCard(deck.draw());
       if (player.score() > 21) scene_num = 5;
     }
+    else if (stay_button.in(mouseX, mouseY)) scene_num = 4;
   }
 
-  else if (stay_button.in(mouseX, mouseY)) scene_num = 4;
+  else if (scene_num == 7) {
+    if (one_button.in(mouseX, mouseY)) {
+      scene_num = 3;
+    }
+    else if (eleven_button.in(mouseX, mouseY)) {
+      scene_num = 3;
+    }
+  }
 }
     
         
@@ -363,7 +373,7 @@ void scene_2() {
   increment_button.draw();
   
   decrement_button = new Button(width/2+10,height/2-40, 150, 35);
-  increment_button.setText("+100");
+  decrement_button.setText("-100");
   decrement_button.setTextSize(25);
   decrement_button.draw();
   
@@ -382,17 +392,17 @@ void scene_2_half() {
   display_dealer_cards(false);
   
   if (player.hand().size() == 2) {
-    if (count > 0) {
+    if (count >= 0) {
       textSize(30);
       fill(255);
       text("What do you want your ace to be?", width/2, height/2);
       
-      Button one_button = new Button(width/2-160,height/2+60, 150, 50);
+      one_button = new Button(width/2-160,height/2+60, 150, 50);
       one_button.setText("1");
       one_button.setTextSize(25);
       one_button.draw();
       
-      Button eleven_button = new Button(width/2+10,height/2+60, 150, 50);
+      eleven_button = new Button(width/2+10,height/2+60, 150, 50);
       eleven_button.setText("11");
       eleven_button.setTextSize(25);
       eleven_button.draw();
@@ -539,7 +549,6 @@ void end_scene() {
   exit();
 }      
     
-    
-    
+  
 
     
