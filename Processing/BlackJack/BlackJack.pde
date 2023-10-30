@@ -81,6 +81,20 @@ class Card {
   boolean changes() {
     return this.change;
   }
+
+  void switchAce() {
+    if (this.points == 1) {
+      this.points = 11;
+    } 
+
+    else if (this.points == 11) {
+      this.points = 1;
+    }
+  }
+
+  void noChange() {
+    this.change = false;
+  }
 }
 
 
@@ -176,6 +190,12 @@ class Player {
   }
 
   int score() {
+    this.score = 0;
+    
+    for (Card c : this.hand) {
+      this.score += c.points();
+    }
+
     return this.score;
   }
 }
@@ -245,7 +265,7 @@ Button one_button;
 Button eleven_button;
 int bet = 500;
 boolean bool = false;
-int count = 0;
+int timer = 0;
 
 void setup() {
   deck = new Deck();
@@ -276,7 +296,6 @@ void draw() {
   else if (scene_num == 4) scene_4();
   else if (scene_num == 5) scene_5();
   else if (scene_num == 6) end_scene();
-  else if (scene_num == 7) scene_2_half();
 }
 
 void mouseClicked() {
@@ -296,6 +315,8 @@ void mouseClicked() {
         player.addCard(deck.draw());
         dealer.addCard(deck.draw());
       }
+      checkAces(player);
+      checkAces(dealer);
       scene_num = 3;
 
     }
@@ -304,23 +325,32 @@ void mouseClicked() {
   else if (scene_num == 3) {
     if (hit_button.in(mouseX, mouseY)) {
       player.addCard(deck.draw());
-      if (player.score() > 21) scene_num = 5;
+      if (player.score() > 21) {
+        // scene_num = 5;
+        if (!checkAces(player)) scene_num = 5;
+      }
     }
     else if (stay_button.in(mouseX, mouseY)) scene_num = 4;
-  }
-
-  else if (scene_num == 7) {
-    if (one_button.in(mouseX, mouseY)) {
-      scene_num = 3;
-    }
-    else if (eleven_button.in(mouseX, mouseY)) {
-      scene_num = 3;
-    }
   }
 }
     
         
-   
+boolean checkAces(Player p) {
+  ArrayList<Card> h = p.hand();
+
+  for (int i = 0; i < h.size();i++) {
+    Card c = h.get(i);
+    if (c.changes() && p.score() > 21) {
+      c.switchAce();
+      c.noChange();
+    }
+  }
+
+  if (p.score() > 21) return false;
+  else return true;
+}
+
+
 void scene_0() {
   background(0, 100, 50);
   textSize(40);
@@ -381,37 +411,7 @@ void scene_2() {
   finish_bet_button.setText("Bet");
   finish_bet_button.setTextSize(25);
   finish_bet_button.draw();
-}
-
-void scene_2_half() {
-  background(0, 100, 50);
-  draw_deck();
-  draw_money();
-  draw_bet();
-  display_player_cards();
-  display_dealer_cards(false);
-  
-  if (player.hand().size() == 2) {
-    if (count >= 0) {
-      textSize(30);
-      fill(255);
-      text("What do you want your ace to be?", width/2, height/2);
-      
-      one_button = new Button(width/2-160,height/2+60, 150, 50);
-      one_button.setText("1");
-      one_button.setTextSize(25);
-      one_button.draw();
-      
-      eleven_button = new Button(width/2+10,height/2+60, 150, 50);
-      eleven_button.setText("11");
-      eleven_button.setTextSize(25);
-      eleven_button.draw();
-    }
-  }
-}
-          
-      
-    
+}    
     
 void scene_3() {
   
@@ -436,13 +436,16 @@ void scene_3() {
 }
 
 void scene_4() {
-  if (dealer.score() < 17) dealer.addCard(deck.draw());
-  else scene_num = 5;
+  while (dealer.score() < 17) {
+    dealer.addCard(deck.draw());
+    checkAces(dealer);
+  }
+  scene_num = 5;
 }
 
 void scene_5() {
     
-  if (count == 0) {
+  if (timer == 0) {
     background(0, 100, 50);
     draw_deck();
     draw_money();
@@ -455,9 +458,9 @@ void scene_5() {
     text("Dealer's score: " + dealer.score(), width/2+20, height/2-200);
   }
 
-  count += 1;
+  timer += 1;
 
-  if (count == 5) {
+  if (timer == 5) {
     if (dealer.score() == 21 || player.score() > 21 || (player.score() <= dealer.score() && !(dealer.score() > 21))) {
       fill(255);
       textSize(30);
@@ -474,10 +477,10 @@ void scene_5() {
 
   }
 
-  else if (count > 200) {
+  else if (timer > 100) {
       player.deposit(bet);
       scene_num = 1;
-      count = 0;
+      timer = 0;
       bet = 500;
       player.emptyHand();
       dealer.emptyHand();
@@ -526,7 +529,7 @@ void display_player_cards() {
 void display_dealer_cards(boolean b) {
   ArrayList<Card> temp = dealer.hand();
   for (int i = 0; i < temp.size(); i++) {
-    if (i == 0 && bool == false) {
+    if (i == 0 && b == false) {
       String pathname = "Back.png";
       PImage img = loadImage(pathname);
       image(img, width/2 - (25 * (temp.size() + 1)), 40, 150, 200);  
