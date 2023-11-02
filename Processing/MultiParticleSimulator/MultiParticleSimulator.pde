@@ -21,7 +21,7 @@ void setup(){
 
 void draw(){
   noStroke();
-  fill(0,0,0,90);
+  fill(0,0,0,70);
   //background(0);
   //fill(0);
   rect(0,0,width,height);
