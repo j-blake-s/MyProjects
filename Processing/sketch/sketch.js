@@ -41,7 +41,7 @@ function draw() {
 
   if (increaseFrame) {
     frames += frameDx;
-    frames = min(60, frames);
+    frames = min(120, frames);
   }
 
   if (reduceFrame) {
