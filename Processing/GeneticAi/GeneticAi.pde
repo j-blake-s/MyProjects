@@ -13,4 +13,5 @@ void draw() {
 
   background(0);
   m.draw();
+  m.drawBoundingBox();
 }
