@@ -2,7 +2,8 @@
 
 // Global Settings
 PVector DEF_POS = new PVector(0,0);
-int mouseSize = 24;
+int mouseSize = 8;
+int searchAreaRadius = 3*mouseSize;
 
 class Mouse {
 
@@ -51,31 +52,22 @@ class Mouse {
 
   // Calculate direction based on cursor position
   private PVector direction() {
-    PVector direction = PVector.sub(new PVector(mouseX, mouseY), this.pos);
+    // PVector direction = PVector.sub(new PVector(mouseX, mouseY), this.pos);
+    PVector direction = this.vec();
     direction.normalize();
     return direction;
   }
 
   private PVector[] calculateOutline() {
-
     PVector[] points = new PVector[4];
 
-    // Calculate direction based on cursor position
-    PVector heading = this.direction();
-    heading.mult(mouseSize);
-
-    // Get vector perpendicular to heading
-    PVector s = heading.rotate(radians(-90)).copy();
-    heading.rotate(radians(90));
-    
-    // Calculate the outline of the shape
-    PVector top = PVector.add(this.pos, PVector.mult(heading,2));
-    PVector bot = PVector.sub(this.pos, PVector.mult(heading,0.666));
-    PVector left = PVector.sub(bot, PVector.sub(heading,s));
-    PVector right = PVector.sub(bot, PVector.add(heading,s));
+    PVector top = new PVector(0, -2*mouseSize);
+    PVector bot = new PVector(0, 2*mouseSize/3);
+    PVector left = new PVector(-mouseSize, 5*mouseSize/3);
+    PVector right = new PVector(mouseSize, 5*mouseSize/3);
   
     return new PVector[]{top, left, bot, right};
-  } 
+  }  
 
   // Draw Object
   void draw() {
@@ -87,41 +79,59 @@ class Mouse {
     // Draw Shape
     noStroke();
     fill(255, 0, 0);
+    pushMatrix();
+    translate(this.pos.x, this.pos.y);
+    rotate(this.direction().heading()+radians(90));
     beginShape();
     for (PVector p : points) 
       vertex(p.x, p.y);
     endShape();
+    popMatrix();
 
   }
 
+  // Draws the bounding boxes for the mouse
   void drawBoundingBox() {
 
     noFill();
     stroke(255);
-    PVector[] points = this.calculateOutline();
 
     pushMatrix(); // Save State of Screen
     translate(this.pos.x, this.pos.y);    
-    rotate(this.direction().heading());
-
-
-    PVector a = PVector.sub(points[3], points[1]);
-    PVector b = PVector.sub(points[3], this.pos);
-    
-    // rect(abs(points[1].x-this.pos.x), 0, sizeX, sizeY);
-    rect(-a.x/2, -b.y/2, a.mag(), b.mag());
-    ellipse(-a.x/2, -b.y/2, 5, 5);
-
-    // sizeX = (points[3].x - points[1].x) / 2;
-    // sizeY = this.pos.y - points[0].y;
-    // rect(this.pos.x - (sizeX/2), points[0].y, sizeX, sizeY);
-    rotate(-this.direction().heading());
+    rotate(this.direction().heading()+radians(90));
+    rect(-mouseSize, 0, 2*mouseSize, 5*mouseSize/3);
+    rect(-mouseSize*0.5, -2*mouseSize,mouseSize,2*mouseSize);
     popMatrix(); // Load State of Screen
 
+  }
+
+  void drawFoodSearchArea(){
     
+    noStroke();
+    fill(0, 255, 0, 50);
+    
+    int px = int(this.pos.x);
+    int py = int(this.pos.y);
+    for (int i = 0; i < searchAreaRadius+1; i++) {
+      for (int j = -i; j < i+1; j++) {
+        rect(px+i-searchAreaRadius,py+j, 1,1);
+      }
+    }
 
+    for (int i = 0; i < searchAreaRadius; i++) {
+      for (int j = -i; j < i+1; j++) {
+        rect(px-i+searchAreaRadius,py+j, 1,1);
+      }
+    }
 
+  }
 
+  // Move the mouse based on its velocity
+  void move() {
+    // this.vec.set(0,0);
+    this.vec.add(this.acc);
+    this.pos.add(this.vec);
+    this.acc.set(new PVector(0,0));
   }
 
 }

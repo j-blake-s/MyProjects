@@ -1,7 +1,7 @@
 
 
 
-int foodSize = 10;
+int DEF_SIZE = 10;
 class Food {
 
   // Instance Variables
@@ -9,30 +9,36 @@ class Food {
   private int y = 0;
   private float power;
   private PVector c;
+  private int size;
 
 
   // Initialization
-  void init(int aX, int aY, float p) {
+  void init(int aX, int aY, float p, int s) {
     x(aX);
     y(aY);
     power(p);    
+    size(s);
   }
 
   // Constructors
   Food() {
-    init(width/2, height/2, 0);
+    init(width/2, height/2, 0, 0);
   }
 
   Food(int aX, int aY) {
-    init(aX, aY, 0);
+    init(aX, aY, 0, 0);
   }
 
   Food(int aX, int aY, float p) {
-    init(aX, aY, p);  
+    init(aX, aY, p, 0);  
+  }
+
+  Food(int aX, int aY, float p, int s) {
+    init(aX, aY, p, s);  
   }
 
   Food(Food f) {
-    init(f.x(), f.y(), f.power());
+    init(f.x(), f.y(), f.power(), f.size());
   }
 
 
@@ -57,11 +63,16 @@ class Food {
     this.power = p;
   }
 
+  int size() { return this.size; }
+  void size(int s) {
+    if( s >= 1) this.size = s;
+    else this.size = DEF_SIZE;
+  }
 
   // Draw Object
   void draw() {
     noStroke();
     fill(this.c.x, this.c.y, this.c.z);
-    ellipse(this.x, this.y, foodSize, foodSize);
+    ellipse(this.x, this.y, this.size, this.size);
   }
 }
