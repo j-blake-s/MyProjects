@@ -9,14 +9,14 @@ class Mouse {
 
   // Instance Variables
   private PVector pos;
-  private PVector vec;
+  private PVector vel;
   private PVector acc;
 
 
   // Initialization
   void init(PVector p) {
     pos(p);
-    vec(null);
+    vel(null);
     acc(null);
   }
 
@@ -30,21 +30,21 @@ class Mouse {
   }
 
   // Position
-  PVector pos() {return this.pos;}
+  PVector pos() { return this.pos; }
   void pos(PVector p) {
     if (p == null) this.pos = DEF_POS.copy();
     else this.pos = p.copy();
   }
 
   // Velocity
-  PVector vec() {return this.vec;}
-  void vec(PVector v) {
-    if (v == null) this.vec = new PVector(0, 0);
-    else this.vec = v.copy();
+  PVector vel() { return this.vel; }
+  void vel(PVector v) {
+    if (v == null) this.vel = new PVector(0, 0);
+    else this.vel = v.copy();
   }
 
   // Acceleration
-  PVector acc() {return this.acc;}
+  PVector acc() { return this.acc; }
   void acc(PVector a) {
     if (a == null) this.acc = new PVector(0, 0);
     else this.acc = a.copy();
@@ -53,7 +53,7 @@ class Mouse {
   // Calculate direction based on cursor position
   private PVector direction() {
     // PVector direction = PVector.sub(new PVector(mouseX, mouseY), this.pos);
-    PVector direction = this.vec();
+    PVector direction = this.vel().copy();
     direction.normalize();
     return direction;
   }
@@ -108,30 +108,39 @@ class Mouse {
   void drawFoodSearchArea(){
     
     noStroke();
-    fill(0, 255, 0, 50);
-    
-    int px = int(this.pos.x);
-    int py = int(this.pos.y);
-    for (int i = 0; i < searchAreaRadius+1; i++) {
-      for (int j = -i; j < i+1; j++) {
-        rect(px+i-searchAreaRadius,py+j, 1,1);
+    fill(0, 255, 0, 50);    
+    for (int i = 0; i < searchAreaRadius*2; i++) {
+      for (int j = 0; j < searchAreaRadius*2; j++) {
+        rect(int(this.pos.x+j-searchAreaRadius),int(this.pos.y-searchAreaRadius+i), 1,1);
       }
     }
-
-    for (int i = 0; i < searchAreaRadius; i++) {
-      for (int j = -i; j < i+1; j++) {
-        rect(px-i+searchAreaRadius,py+j, 1,1);
-      }
-    }
-
   }
 
-  // Move the mouse based on its velocity
+  boolean inFoodSearchArea(int x, int y){ 
+    if (abs(int(this.pos.x-x)) <= searchAreaRadius && 
+        abs(int(this.pos.y-y)) <= searchAreaRadius) {
+      return true;
+    }
+    return false;
+  }
+
+  void eat(Food f) {
+    return;
+  }
+
+  int[] foodRange() {
+    int xl = int(this.pos.x - searchAreaRadius);
+    int xr = int(this.pos.x + searchAreaRadius);
+    int yu = int(this.pos.y - searchAreaRadius);
+    int yb = int(this.pos.y + searchAreaRadius);
+    return new int[]{xl,xr,yu,yb};
+  }
+
   void move() {
-    // this.vec.set(0,0);
-    this.vec.add(this.acc);
-    this.pos.add(this.vec);
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
     this.acc.set(new PVector(0,0));
+    this.vel.mult(0.8);
   }
 
 }
