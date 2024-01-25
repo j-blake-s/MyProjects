@@ -19,22 +19,25 @@ class DebugGame {
 
 
   void draw_() {
-    background(0);
+    
+    if (!Keyboard.get(Keys.P)) {
+      background(0);
 
-    this.movePlayer();  
-    this.player.move();
-    this.playerEats();
+      this.movePlayer();  
+      this.player.move();
+      this.playerEats();
 
-    for (Food[] row : this.grid) {
-      for (Food f : row) {
-        if (f != null) f.draw();
+      for (Food[] row : this.grid) {
+        for (Food f : row) {
+          if (f != null) f.draw();
+        }
       }
-    }
 
-    // println(this.player.vel);
-    this.player.drawFoodSearchArea();
-    this.player.draw();
-    // this.player.drawBoundingBox();
+      // println(this.player.vel);
+      this.player.drawFoodSearchArea();
+      this.player.draw();
+      // this.player.drawBoundingBox();
+    }
   }
 
 

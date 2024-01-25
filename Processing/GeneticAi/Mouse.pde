@@ -3,7 +3,7 @@
 // Global Settings
 PVector DEF_POS = new PVector(0,0);
 int mouseSize = 8;
-int searchAreaRadius = 3*mouseSize;
+int searchAreaRadius = 2*mouseSize;
 
 class Mouse {
 
@@ -109,20 +109,17 @@ class Mouse {
     
     noStroke();
     fill(0, 255, 0, 50);    
-    for (int i = 0; i < searchAreaRadius*2; i++) {
-      for (int j = 0; j < searchAreaRadius*2; j++) {
-        rect(int(this.pos.x+j-searchAreaRadius),int(this.pos.y-searchAreaRadius+i), 1,1);
-      }
-    }
+    ellipse(this.pos.x, this.pos.y, searchAreaRadius*2, searchAreaRadius*2);
+
   }
 
+
   boolean inFoodSearchArea(int x, int y){ 
-    if (abs(int(this.pos.x-x)) <= searchAreaRadius && 
-        abs(int(this.pos.y-y)) <= searchAreaRadius) {
-      return true;
-    }
-    return false;
+    PVector foodPos = new PVector(x, y);
+    if (PVector.sub(this.pos, foodPos).mag() < searchAreaRadius) return true;
+    else return false;
   }
+
 
   void eat(Food f) {
     return;

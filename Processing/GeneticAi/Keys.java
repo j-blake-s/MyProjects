@@ -6,5 +6,6 @@ class Keys {
   final static int S = 83;
   final static int D = 68;
   final static int SPACE = 32;
+  final static int P = 80;
 
 }
