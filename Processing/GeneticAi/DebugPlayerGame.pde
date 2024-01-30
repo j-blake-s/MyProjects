@@ -1,7 +1,8 @@
 class DebugGame {
 
   private Mouse player;
-  private FoodPop foods;
+  private FoodPop food;
+  private FoodPop poison;
 
   private int clock = 0;
   private float moveSize = 2;
@@ -9,10 +10,15 @@ class DebugGame {
   DebugGame() {
     background(0);
     this.player = new Mouse(new PVector(width/2, height/2));
-    this.foods = new FoodPop(width, height);
+    this.food = new FoodPop(width, height, 1);
+    this.poison = new FoodPop(width, height, -1);
 
     for (int i = 0; i < 100; i++) {
-      this.foods.randSpawn();
+      this.food.randSpawn();
+    }
+
+    for (int i = 0; i < 100; i++) {
+      this.poison.randSpawn();
     }
 
   }
@@ -32,12 +38,17 @@ class DebugGame {
       clock = (clock + 1) % 60;
       background(0);
 
-      if (clock % 30 == 0)
-        this.foods.randSpawn();
+      if (clock % 30 == 0) {
+        this.food.randSpawn();
+        this.poison.randSpawn();
+      }
+
       this.movePlayer();  
       this.player.move();
       this.playerEats();
-      this.foods.draw();
+      
+      this.food.draw();
+      this.poison.draw();
 
       // println(this.player.vel);
       this.player.drawConsumptionZone();
@@ -51,7 +62,8 @@ class DebugGame {
     for (int i = range[0]; i <= range[1]; i++) {
       for (int j = range[2]; j <= range[3]; j++) {
         if (this.player.inConsumptionZone(i, j)) {
-          this.player.eat(this.foods.eat(i,j));
+          this.player.eat(this.food.eat(i,j));
+          this.player.eat(this.poison.eat(i,j));
         }
       }
     }

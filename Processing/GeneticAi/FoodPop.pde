@@ -5,16 +5,19 @@ class FoodPop {
   private Food[][] grid;
   
   // Initilize empty grid
-  void init(int w, int h) {
+  void init(int w, int h, int p) {
     this.grid = new Food[w][h];
-    this.globPower = 1;
+    this.globPower = p;
   }
 
   // Constructors
   FoodPop(int w, int h) {
-    init(w,h);
+    init(w,h, 0);
   }
 
+  FoodPop(int w, int h, int power) {
+    init(w,h, power);
+  }
   // Accessors
   int width() { return this.grid.length; }
   int height() { return this.grid[0].length; }
