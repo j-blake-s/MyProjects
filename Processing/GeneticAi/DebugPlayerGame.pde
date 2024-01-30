@@ -20,7 +20,14 @@ class DebugGame {
 
   void draw_() {
     
-    if (!Keyboard.get(Keys.P)) {
+    if (Keyboard.toggled(Keys.P)) {
+      fill(255);
+      noStroke();
+      textSize(256);
+      textAlign(CENTER);
+      text("PAUSED", width/2, height/2);
+    }
+    else {
       background(0);
 
       this.movePlayer();  
@@ -58,10 +65,10 @@ class DebugGame {
   private void movePlayer() {
     float moveX = 0;
     float moveY = 0;   
-    if (Keyboard.get(Keys.W)) moveY -= moveSize;
-    if (Keyboard.get(Keys.S)) moveY += moveSize;
-    if (Keyboard.get(Keys.A)) moveX -= moveSize;
-    if (Keyboard.get(Keys.D)) moveX += moveSize;
+    if (Keyboard.pressed(Keys.W)) moveY -= moveSize;
+    if (Keyboard.pressed(Keys.S)) moveY += moveSize;
+    if (Keyboard.pressed(Keys.A)) moveX -= moveSize;
+    if (Keyboard.pressed(Keys.D)) moveX += moveSize;
     this.movePlayer_(moveX, moveY);
   }  
 
