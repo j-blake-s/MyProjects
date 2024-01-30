@@ -109,6 +109,7 @@ class Mouse {
 
   // Filler method
   void eat(Food f) {
+    if (f == null) return;
     return;
   }
 

@@ -1,20 +1,20 @@
 class DebugGame {
 
   private Mouse player;
-  private Food[][] grid;
+  private FoodPop foods;
 
+  private int clock = 0;
   private float moveSize = 2;
 
   DebugGame() {
     background(0);
     this.player = new Mouse(new PVector(width/2, height/2));
-    this.grid = new Food[width][height];
+    this.foods = new FoodPop(width, height);
 
-    for (int i = 0; i < width; i += 100) {
-      for (int j = 0; j < height; j+= 100) {
-        grid[i][j] = new Food(i,j,1,5);
-      }
+    for (int i = 0; i < 100; i++) {
+      this.foods.randSpawn();
     }
+
   }
 
 
@@ -29,17 +29,15 @@ class DebugGame {
       text("PAUSED", width/2, height/2);
     }
     else {
+      clock = (clock + 1) % 60;
       background(0);
 
+      if (clock % 30 == 0)
+        this.foods.randSpawn();
       this.movePlayer();  
       this.player.move();
       this.playerEats();
-
-      for (Food[] row : this.grid) {
-        for (Food f : row) {
-          if (f != null) f.draw();
-        }
-      }
+      this.foods.draw();
 
       // println(this.player.vel);
       this.player.drawConsumptionZone();
@@ -52,12 +50,8 @@ class DebugGame {
     int[] range = this.player.foodRange();
     for (int i = range[0]; i <= range[1]; i++) {
       for (int j = range[2]; j <= range[3]; j++) {
-        if (i >= 0 && i < width && j >=0 && j < height &&
-            grid[i][j] != null && 
-            this.player.inConsumptionZone(i, j)
-        ) {
-          this.player.eat(grid[i][j]);
-          grid[i][j] = null;
+        if (this.player.inConsumptionZone(i, j)) {
+          this.player.eat(this.foods.eat(i,j));
         }
       }
     }
