@@ -20,6 +20,7 @@ class DebugGame {
 
   void draw_() {
     
+    // Pause screen
     if (Keyboard.toggled(Keys.P)) {
       fill(255);
       noStroke();
@@ -41,9 +42,8 @@ class DebugGame {
       }
 
       // println(this.player.vel);
-      this.player.drawFoodSearchArea();
+      this.player.drawConsumptionZone();
       this.player.draw();
-      // this.player.drawBoundingBox();
     }
   }
 
@@ -53,8 +53,9 @@ class DebugGame {
     for (int i = range[0]; i <= range[1]; i++) {
       for (int j = range[2]; j <= range[3]; j++) {
         if (i >= 0 && i < width && j >=0 && j < height &&
-            this.player.inFoodSearchArea(i, j) && 
-            grid[i][j] != null) {
+            grid[i][j] != null && 
+            this.player.inConsumptionZone(i, j)
+        ) {
           this.player.eat(grid[i][j]);
           grid[i][j] = null;
         }
