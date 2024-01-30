@@ -7,13 +7,13 @@ class Food {
   // Instance Variables
   private int x = 0;
   private int y = 0;
-  private float power;
+  private int power;
   private PVector c;
   private int size;
 
 
   // Initialization
-  void init(int aX, int aY, float p, int s) {
+  void init(int aX, int aY, int p, int s) {
     x(aX);
     y(aY);
     power(p);    
@@ -29,11 +29,11 @@ class Food {
     init(aX, aY, 0, 0);
   }
 
-  Food(int aX, int aY, float p) {
+  Food(int aX, int aY, int p) {
     init(aX, aY, p, 0);  
   }
 
-  Food(int aX, int aY, float p, int s) {
+  Food(int aX, int aY, int p, int s) {
     init(aX, aY, p, s);  
   }
 
@@ -55,8 +55,8 @@ class Food {
   }
 
   // Power of Food
-  float power() { return this.power; }
-  void power(float p) {
+  int power() { return this.power; }
+  void power(int p) {
     if (p < 0) this.c = new PVector(255, 0, 0);         // Red
     else if (p > 0) this.c = new PVector(0, 255, 0);    // Green
     else this.c = new PVector(150, 150, 150);           // Gray

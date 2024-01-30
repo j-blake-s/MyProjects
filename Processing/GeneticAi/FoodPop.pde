@@ -42,7 +42,7 @@ class FoodPop {
       ret = this.grid[x][y];
       this.grid[x][y] = null;
     }
-    return null;
+    return ret;
   }
 
   // Check if given index is valid

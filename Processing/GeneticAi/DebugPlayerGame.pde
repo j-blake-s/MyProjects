@@ -10,8 +10,8 @@ class DebugGame {
   DebugGame() {
     background(0);
     this.player = new Mouse(new PVector(width/2, height/2));
-    this.food = new FoodPop(width, height, 1);
-    this.poison = new FoodPop(width, height, -1);
+    this.food = new FoodPop(width, height, 15);
+    this.poison = new FoodPop(width, height, -15);
 
     for (int i = 0; i < 100; i++) {
       this.food.randSpawn();
@@ -46,6 +46,11 @@ class DebugGame {
       this.movePlayer();  
       this.player.move();
       this.playerEats();
+
+      fill(255);
+      textSize(64);
+      text(""+this.player.health(), 100, 100);
+      print("hello");
       
       this.food.draw();
       this.poison.draw();

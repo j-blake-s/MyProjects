@@ -4,20 +4,22 @@
 PVector DEF_POS = new PVector(0,0);
 int mouseSize = 8;
 int consumptionRadius = 2*mouseSize;
-
+int DEF_HEALTH = 150;
 class Mouse {
 
   // Instance Variables
   private PVector pos;
   private PVector vel;
   private PVector acc;
-
+  private int health;
+  private PVector c;
 
   // Initialization
   void init(PVector p) {
     pos(p);
     vel(null);
     acc(null);
+    this.health(DEF_HEALTH);
   }
 
   // Constructors
@@ -27,6 +29,13 @@ class Mouse {
 
   Mouse(PVector p) {
     init(p);
+  }
+
+  // Health
+  int health() { return this.health; }
+  void health(int h) {
+    this.health = h;
+    this.c = new PVector(255-this.health, this.health, 0);
   }
 
   // Position
@@ -82,7 +91,7 @@ class Mouse {
 
     // Draw Shape
     noStroke();
-    fill(255, 0, 0);
+    fill(this.c.x, this.c.y, this.c.z);
     pushMatrix();
     translate(this.pos.x, this.pos.y);
     rotate(this.direction().heading()+radians(90));
@@ -94,23 +103,26 @@ class Mouse {
 
   }
 
+  // Draws the zone in which food is eaten
   void drawConsumptionZone(){
     noStroke();
     fill(0, 255, 0, 50);    
     ellipse(this.pos.x, this.pos.y, consumptionRadius*2, consumptionRadius*2);
   }
 
-
+  // Checks if an given index is in the consumption zone
   boolean inConsumptionZone(int x, int y){ 
     PVector foodPos = new PVector(x, y);
     if (PVector.sub(this.pos, foodPos).mag() < consumptionRadius) return true;
     else return false;
   }
 
-  // Filler method
+  // Eat food and update health
   void eat(Food f) {
     if (f == null) return;
-    return;
+    else {
+      this.health(this.health + f.power());
+    }
   }
 
   // Returns range of indices to check for food
