@@ -9,7 +9,9 @@ class DebugGame {
 
   DebugGame() {
     background(0);
-    this.player = new Mouse(new PVector(width/2, height/2));
+    DNA dna = new DNA(MouseGenes.NUM_GENES);
+    dna.write(MouseGenes.SIZE, 0.5);
+    this.player = new Mouse(new PVector(width/2, height/2), dna);
     this.food = new FoodPop(width, height, 15);
     this.poison = new FoodPop(width, height, -15);
 

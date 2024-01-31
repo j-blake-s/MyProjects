@@ -14,8 +14,6 @@ class MouseGenes {
 // Global Settings
 PVector DEF_MOUSE_POS = new PVector(0,0);
 int DEF_MOUSE_HEALTH = 150;
-int mouseSize = 8;
-int consumptionRadius = 2*mouseSize;
 
 class Mouse {
 
@@ -25,22 +23,41 @@ class Mouse {
   private PVector acc;
   private int health;
   private PVector c;
+  private DNA dna;
+  private int size;
 
   // Initialization
-  private void init(PVector p) {
-    pos(p);
-    vel(null);
-    acc(null);
+  private void init(PVector p, DNA genes) {
+    this.pos(p);
+    this.vel(null);
+    this.acc(null);
     this.health(DEF_MOUSE_HEALTH);
-  }
+    this.dna = genes;
+    this.size(this.dna.read(MouseGenes.SIZE));
 
+  }
   // Constructors
   Mouse() {
-    init(DEF_MOUSE_POS);
+    init(DEF_MOUSE_POS, new DNA(MouseGenes.NUM_GENES));
   }
 
   Mouse(PVector p) {
-    init(p);
+    init(p, new DNA(MouseGenes.NUM_GENES));
+  }
+
+  Mouse(DNA genes) {
+    init(DEF_MOUSE_POS, genes);
+  }
+
+  Mouse(PVector p, DNA genes) {
+    init(p, genes);
+  }
+
+
+  // Size
+  int size() {return this.size;}
+  private void size(float size_dna) {
+    this.size = int(size_dna * 16)+4;
   }
 
   // Health
@@ -71,7 +88,7 @@ class Mouse {
     else this.acc = a.copy();
   }
 
-  // Move Mouse
+  // Move
   void move() {
     this.vel.add(this.acc);
     this.pos.add(this.vel);
@@ -79,53 +96,28 @@ class Mouse {
     this.vel.mult(0.8);
   }
 
-  // Calculate direction based on cursor position
+  // Calculate direction based on velocity
   private PVector direction() {
     PVector direction = this.vel().copy();
     direction.normalize();
     return direction;
   }
 
+  // Calculates the outline of the mouse
   private PVector[] calculateOutline() {
     PVector[] points = new PVector[4];
-    PVector top = new PVector(0, -2*mouseSize);
-    PVector bot = new PVector(0, 2*mouseSize/3);
-    PVector left = new PVector(-mouseSize, 5*mouseSize/3);
-    PVector right = new PVector(mouseSize, 5*mouseSize/3);
+    PVector top = new PVector(0, -2*this.size);
+    PVector bot = new PVector(0, 2*this.size/3);
+    PVector left = new PVector(-this.size, 5*this.size/3);
+    PVector right = new PVector(this.size, 5*this.size/3);
     return new PVector[]{top, left, bot, right};
   }  
 
-  // Draw Object
-  void draw() {
-
-    // Get Outline of Shape
-    PVector[] points = this.calculateOutline();
-
-    // Draw Shape
-    noStroke();
-    fill(this.c.x, this.c.y, this.c.z);
-    pushMatrix();
-    translate(this.pos.x, this.pos.y);
-    rotate(this.direction().heading()+radians(90));
-    beginShape();
-    for (PVector p : points) 
-      vertex(p.x, p.y);
-    endShape();
-    popMatrix();
-
-  }
-
-  // Draws the zone in which food is eaten
-  void drawConsumptionZone(){
-    noStroke();
-    fill(0, 255, 0, 50);    
-    ellipse(this.pos.x, this.pos.y, consumptionRadius*2, consumptionRadius*2);
-  }
 
   // Checks if an given index is in the consumption zone
   boolean inConsumptionZone(int x, int y){ 
     PVector foodPos = new PVector(x, y);
-    if (PVector.sub(this.pos, foodPos).mag() < consumptionRadius) return true;
+    if (PVector.sub(this.pos, foodPos).mag() < 2*this.size) return true;
     else return false;
   }
 
@@ -139,12 +131,38 @@ class Mouse {
 
   // Returns range of indices to check for food
   int[] foodRange() {
-    int xl = int(this.pos.x - consumptionRadius);
-    int xr = int(this.pos.x + consumptionRadius);
-    int yu = int(this.pos.y - consumptionRadius);
-    int yb = int(this.pos.y + consumptionRadius);
+    int xl = int(this.pos.x - 2*this.size);
+    int xr = int(this.pos.x + 2*this.size);
+    int yu = int(this.pos.y - 2*this.size);
+    int yb = int(this.pos.y + 2*this.size);
     return new int[]{xl,xr,yu,yb};
   }
 
+  // Draws the zone in which food is eaten
+  void drawConsumptionZone(){
+    noStroke();
+    fill(0, 255, 0, 50);    
+    ellipse(this.pos.x, this.pos.y, 2*this.size*2, 2*this.size*2);
+  }
+
+  // Draw Object
+  void draw() {
+
+    // Get Outline of Shape
+    PVector[] points = this.calculateOutline();
+
+    // Draw Shape
+    noStroke();
+    fill(255-this.health, this.health, 0);
+    pushMatrix();
+    translate(this.pos.x, this.pos.y);
+    rotate(this.direction().heading()+radians(90));
+    beginShape();
+    for (PVector p : points) 
+      vertex(p.x, p.y);
+    endShape();
+    popMatrix();
+
+  }
 
 }

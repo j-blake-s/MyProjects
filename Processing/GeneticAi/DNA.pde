@@ -1,9 +1,18 @@
+
+
+// Random mutates a given number
+float mutate(float val) {
+  return (val+random(-0.01,0.01)) * random_norm();
+}
+
 class DNA {
 
   private float[] genes;
 
   private void init(int numGenes) {
     this.genes = new float[numGenes];
+    for (int i = 0; i < numGenes; i++)
+      this.genes[i] = random(1);
   }
 
   DNA(int numGenes) {
@@ -31,23 +40,21 @@ class DNA {
       child.write(i, mutate(this.read(i)));
     return child;
   }
+
+  // Sexual Reproduction
+  DNA reproduce(DNA that) {
+    if (this.size() != that.size()) return null;
+    
+    DNA child = new DNA(this.size());
+
+    // Inherit DNA from parents randomly
+    for (int i = 0; i < child.size(); i++) {
+      if (random(1) < 0.5) child.write(i, mutate(this.read(i)));
+      else child.write(i, mutate(that.read(i)));
+    }
+
+    return child;
+  } 
+
 }  
-// Sexual Reproduction
-DNA reproduce(DNA mom, DNA dad) {
-  if (mom.size() != dad.size()) return null;
-  
-  DNA child = new DNA(mom.size());
 
-  // Inherit DNA from parents randomly
-  for (int i = 0; i < child.size(); i++) {
-    if (random(1) < 0.5) child.write(i, mutate(mom.read(i)));
-    else child.write(i, mutate(dad.read(i)));
-  }
-
-  return child;
-} 
-
-// Random mutates a given number
-float mutate(float val) {
-  return (val+random(-0.01,0.01)) * random_norm();
-}
