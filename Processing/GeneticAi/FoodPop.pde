@@ -11,7 +11,7 @@ class FoodPop {
   private Food[][] grid;
   
   // Initilize empty grid
-  void init(int w, int h, int p, int s) {
+  private void init(int w, int h, int p, int s) {
     this.grid = new Food[w][h];
     this.globPower = p;
     this.globSize = s;
