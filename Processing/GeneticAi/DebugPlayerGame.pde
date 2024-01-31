@@ -50,12 +50,10 @@ class DebugGame {
       fill(255);
       textSize(64);
       text(""+this.player.health(), 100, 100);
-      print("hello");
       
       this.food.draw();
       this.poison.draw();
 
-      // println(this.player.vel);
       this.player.drawConsumptionZone();
       this.player.draw();
     }
