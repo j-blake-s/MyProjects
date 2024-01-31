@@ -1,10 +1,10 @@
 
 
 // Global Settings
-PVector DEF_POS = new PVector(0,0);
+PVector DEF_MOUSE_POS = new PVector(0,0);
+int DEF_MOUSE_HEALTH = 150;
 int mouseSize = 8;
 int consumptionRadius = 2*mouseSize;
-int DEF_HEALTH = 150;
 class Mouse {
 
   // Instance Variables
@@ -19,12 +19,12 @@ class Mouse {
     pos(p);
     vel(null);
     acc(null);
-    this.health(DEF_HEALTH);
+    this.health(DEF_MOUSE_HEALTH);
   }
 
   // Constructors
   Mouse() {
-    init(DEF_POS);
+    init(DEF_MOUSE_POS);
   }
 
   Mouse(PVector p) {
@@ -41,7 +41,7 @@ class Mouse {
   // Position
   PVector pos() { return this.pos; }
   void pos(PVector p) {
-    if (p == null) this.pos = DEF_POS.copy();
+    if (p == null) this.pos = DEF_MOUSE_POS.copy();
     else this.pos = p.copy();
   }
 

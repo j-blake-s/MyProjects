@@ -1,7 +1,7 @@
 
 
 
-int DEF_SIZE = 10;
+int DEF_FOOD_SIZE = 8;
 class Food {
 
   // Instance Variables
@@ -66,7 +66,7 @@ class Food {
   int size() { return this.size; }
   void size(int s) {
     if( s >= 1) this.size = s;
-    else this.size = DEF_SIZE;
+    else this.size = DEF_FOOD_SIZE;
   }
 
   // Draw Object

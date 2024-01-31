@@ -1,3 +1,7 @@
+// Settings
+int DEF_POP_SIZE = 8;
+int DEF_POP_POWER = 0;
+
 // Manages instances of food objects
 class FoodPop {
 
@@ -16,11 +20,11 @@ class FoodPop {
 
   // Constructors
   FoodPop(int w, int h) {
-    init(w,h, 0, 4);
+    init(w,h, DEF_POP_POWER, DEF_POP_SIZE);
   }
 
   FoodPop(int w, int h, int power) {
-    init(w, h, power, 4);
+    init(w, h, power, DEF_POP_SIZE);
   }
 
   FoodPop(int w, int h, int power, int size) {
@@ -28,8 +32,9 @@ class FoodPop {
   }
 
   // Accessors
-  int width() { return this.grid.length; }
-  int height() { return this.grid[0].length; }
+  int width() {return this.grid.length;}
+  int height() {return this.grid[0].length;}
+  int size() {return this.foodCount;}
 
   // Spawn Food Objects
   private void _addFood(int x, int y, int p, int s) {
