@@ -1,35 +1,49 @@
 // Manages instances of food objects
 class FoodPop {
-  private int globPower = 1;
-  private int globSize = 8;
+
+  private int globPower;
+  private int globSize;
+  private int foodCount;
   private Food[][] grid;
   
   // Initilize empty grid
-  void init(int w, int h, int p) {
+  void init(int w, int h, int p, int s) {
     this.grid = new Food[w][h];
     this.globPower = p;
+    this.globSize = s;
+    this.foodCount = 0;
   }
 
   // Constructors
   FoodPop(int w, int h) {
-    init(w,h, 0);
+    init(w,h, 0, 4);
   }
 
   FoodPop(int w, int h, int power) {
-    init(w,h, power);
+    init(w, h, power, 4);
   }
+
+  FoodPop(int w, int h, int power, int size) {
+    init(w, h, power, size);
+  }
+
   // Accessors
   int width() { return this.grid.length; }
   int height() { return this.grid[0].length; }
 
   // Spawn Food Objects
+  private void _addFood(int x, int y, int p, int s) {
+    this.grid[x][y] = new Food(x,y,p,s);
+    this.foodCount += 1;
+  }
+
   void randSpawn() {randSpawn(true);}
   void randSpawn(boolean force) {
     do {
       int rX = int(random(this.width()));
       int rY = int(random(this.height()));
       if (this.grid[rX][rY] == null) {
-        this.grid[rX][rY] = new Food(rX, rY, this.globPower, this.globSize);
+        this._addFood(rX, rY, this.globPower, this.globSize);
         return;
       }
     } while (force);
@@ -41,6 +55,7 @@ class FoodPop {
     if (this.isFood(x,y)) {
       ret = this.grid[x][y];
       this.grid[x][y] = null;
+      this.foodCount -= 1;
     }
     return ret;
   }
@@ -67,9 +82,5 @@ class FoodPop {
         if (this.grid[i][j] != null) this.grid[i][j].draw();
     }}
   }
-
-  
-
-
 }
 
