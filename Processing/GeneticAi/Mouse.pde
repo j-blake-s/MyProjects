@@ -1,10 +1,22 @@
+class MouseGenes {
 
+  final static int NUM_GENES = 6;
+
+  final static int GRN_ATTR = 0;
+  final static int RED_ATTR = 1;
+  final static int GRN_SEE = 2;
+  final static int RED_SEE = 3;
+  final static int MAX_SPD = 4;
+  final static int SIZE = 5;
+
+}
 
 // Global Settings
 PVector DEF_MOUSE_POS = new PVector(0,0);
 int DEF_MOUSE_HEALTH = 150;
 int mouseSize = 8;
 int consumptionRadius = 2*mouseSize;
+
 class Mouse {
 
   // Instance Variables
@@ -15,7 +27,7 @@ class Mouse {
   private PVector c;
 
   // Initialization
-  void init(PVector p) {
+  private void init(PVector p) {
     pos(p);
     vel(null);
     acc(null);
