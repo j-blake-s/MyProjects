@@ -7,11 +7,11 @@ class DebugGame {
   private int clock = 0;
   private float moveSize = 2;
 
-  private ArrayMap<Mouse> mice;
+  private Nest mice;
 
   DebugGame() {
     background(0);
-    this.mice = new ArrayMap<Mouse>();
+    this.mice = new Nest();
     DNA dna = new DNA(MouseGenes.NUM_GENES);
     dna.write(MouseGenes.SIZE, 0);
     this.player = new Mouse(new PVector(width/2, height/2), dna);
@@ -68,11 +68,8 @@ class DebugGame {
       this.player.drawConsumptionZone();
       this.player.draw();
 
-      // Draw Mice
-      for (int i = 0; i < this.mice.size(); i++) {
-        this.mice.get(i).draw();
-        this.mice.get(i).drawConsumptionZone();
-      }
+      // Draw mice
+      this.mice.draw();
     }
   }
 
