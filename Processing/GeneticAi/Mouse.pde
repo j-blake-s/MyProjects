@@ -57,7 +57,7 @@ class Mouse {
   // Size
   int size() {return this.size;}
   private void size(float size_dna) {
-    this.size = int(size_dna * 16)+4;
+    this.size = int(size_dna * 16)+8;
   }
 
   // Health

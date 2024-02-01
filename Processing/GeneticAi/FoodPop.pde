@@ -1,5 +1,5 @@
 // Settings
-int DEF_POP_SIZE = 8;
+int DEF_POP_SIZE = 6;
 int DEF_POP_POWER = 0;
 
 // Manages instances of food objects

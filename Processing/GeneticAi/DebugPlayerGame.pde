@@ -7,13 +7,22 @@ class DebugGame {
   private int clock = 0;
   private float moveSize = 2;
 
+  private ArrayMap<Mouse> mice;
+
   DebugGame() {
     background(0);
+    this.mice = new ArrayMap<Mouse>();
     DNA dna = new DNA(MouseGenes.NUM_GENES);
-    dna.write(MouseGenes.SIZE, 0.5);
+    dna.write(MouseGenes.SIZE, 0);
     this.player = new Mouse(new PVector(width/2, height/2), dna);
     this.food = new FoodPop(width, height, 15);
     this.poison = new FoodPop(width, height, -15);
+
+
+
+    for (int i = 0; i < 15; i++) {
+      this.mice.add(new Mouse(new PVector(int(random(width)), int(random(height)))));
+    }
 
     for (int i = 0; i < 100; i++) {
       this.food.randSpawn();
@@ -58,6 +67,12 @@ class DebugGame {
 
       this.player.drawConsumptionZone();
       this.player.draw();
+
+      // Draw Mice
+      for (int i = 0; i < this.mice.size(); i++) {
+        this.mice.get(i).draw();
+        this.mice.get(i).drawConsumptionZone();
+      }
     }
   }
 
