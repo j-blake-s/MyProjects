@@ -34,6 +34,97 @@ float geometric_mean_filter(float[][] image, int i, int j) {
   return pow(sum, 1/81.0);
 }
 
+float harmonic_mean_filter(float[][] image, int i, int j) {
+  
+  int filter_size = 4;
+
+  float sum  = 0;
+  for (int l = -filter_size; l <= filter_size; l++) {
+    for (int r = -filter_size; r <= filter_size; r++) {
+      if (image[i+l][j+r] == 0)
+        return 0;
+      sum =  sum + (1.0 / image[i+l][j+r]);
+    }
+  }
+
+  return 81.0 / sum;
+}
+
+float contraharmonic_mean_filter(float[][] image, int i, int j, int Q) {
+  
+
+  int filter_size = 4;
+
+  float top = 0;
+  float bottom = 0;
+  for (int l = -filter_size; l <= filter_size; l++) {
+    for (int r = -filter_size; r <= filter_size; r++) {
+      top += pow(image[i+l][j+r], Q+1);
+      bottom += pow(image[i+l][j+r], Q);
+    }
+  }
+
+  return top / bottom;
+}
+
+float median_filter(float[][] image, int i, int j) {
+  int filter_size = 4;
+  float[] vals = new float[81];
+  for (int n = 0; n < 81; n++) {
+    int l = n % 9;
+    int r = n / 9;
+    vals[n] = image[i+l-4][j+r-4];
+  }
+
+  vals = sort(vals);
+
+  return vals[40];
+}
+
+float max_filter(float[][] image, int i, int j) {
+  int filter_size = 4;
+  float[] vals = new float[81];
+  for (int n = 0; n < 81; n++) {
+    int l = n % 9;
+    int r = n / 9;
+    vals[n] = image[i+l-4][j+r-4];
+  }
+
+  vals = sort(vals);
+
+  return vals[80];
+}
+
+
+float min_filter(float[][] image, int i, int j) {
+  int filter_size = 4;
+  float[] vals = new float[81];
+  for (int n = 0; n < 81; n++) {
+    int l = n % 9;
+    int r = n / 9;
+    vals[n] = image[i+l-4][j+r-4];
+  }
+
+  vals = sort(vals);
+
+  return vals[0];
+}
+
+float midpoint_filter(float[][] image, int i, int j) {
+  int filter_size = 4;
+  float[] vals = new float[81];
+  for (int n = 0; n < 81; n++) {
+    int l = n % 9;
+    int r = n / 9;
+    vals[n] = image[i+l-4][j+r-4];
+  }
+
+  vals = sort(vals);
+
+  return (vals[0] + vals[80])/2;
+}
+
+
 void setup() {
   size(500, 500);
   background(0);
@@ -91,8 +182,16 @@ float[][] applyFilter(float[][] img) {
 
   for (int i = 4; i < image_size-4; i++) {
     for (int j = 4; j < image_size-4; j++) {
-      // filt_img[i][j] = arithmetic_mean_filter(img, i, j);
-      filt_img[i][j] = geometric_mean_filter(img, i, j);
+      filt_img[i][j] = arithmetic_mean_filter(img, i, j);
+      // filt_img[i][j] = geometric_mean_filter(img, i, j);
+      // filt_img[i][j] = harmonic_mean_filter(img, i, j);
+      // filt_img[i][j] = contraharmonic_mean_filter(img, i, j, 1);
+      // filt_img[i][j] = contraharmonic_mean_filter(img, i, j, 0);
+      // filt_img[i][j] = contraharmonic_mean_filter(img, i, j, -1);
+      // filt_img[i][j] = median_filter(img, i, j);
+      // filt_img[i][j] = max_filter(img, i, j);
+      // filt_img[i][j] = min_filter(img, i, j);
+      // filt_img[i][j] = midpoint_filter(img, i, j);
     }
   }
 
